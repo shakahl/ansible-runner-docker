@@ -1,0 +1,211 @@
+#!/bin/bash
+
+set -e
+
+ENTRYPOINT_D_DIR=/docker-entrypoint.d
+BACKUP_PWD=$PWD
+
+# Colors!
+red='\033[0;31m'
+green='\033[0;32m'
+neutral='\033[0m'
+
+INVENTORY=${INVENTORY:-"inventory.ini"}
+PLAYBOOK=${PLAYBOOK:-"playbook.yml"}
+REQUIREMENTS=${REQUIREMENTS:-"requirements.yml"}
+
+# root_role_dir="/etc/ansible/roles/role_to_test"
+# playbook="${root_role_dir}/${PLAYBOOK_PATH}"
+# inventory="${root_role_dir}/${INVENTORY_PATH}"
+# requirements="${root_role_dir}/${REQUIREMENTS_PATH}"
+# run_tests="${root_role_dir}/${TEST_PATH}"
+# play_cmd="ansible-playbook -i ${inventory}"
+
+
+function raise_error {
+  #printf "${red}ERROR: ${neutral}$1\\n"
+  printf "ERROR: $1\\n"
+  exit ${$2:-1}
+}
+
+function run_cmd {
+  exec "$@"
+}
+
+function cmd_bootstrap {
+  if [[ -d "$ENTRYPOINT_D_DIR" ]]; then
+    run_cmd "/bin/run-parts --verbose $ENTRYPOINT_D_DIRDIR"
+  fi
+}
+
+function cmd_requirements() {
+  cd $DATA_FOLDER
+	if [ -f "$REQUIREMENTS" ]; then
+		#printf "${green}Requirements file detected; installing dependencies.${neutral}\\n"
+    printf "Requirements file detected; installing dependencies.\\n"
+		ansible-galaxy install -r "$REQUIREMENTS"
+	fi
+}
+
+# Add ansible as command if needed
+# if [ "${1:0:1}" = '-' ]; then
+# 	set -- ansible "$@"
+# fi
+
+# if [ "$1" = 'ansible-runner' ]; then
+#   PLAYBOOK_NAME=$2
+#   PLAYBOOK_PATH="$DATA_FOLDER/$PLAYBOOK_NAME"
+#   if [ -z "$(ls -A "$PLAYBOOK_PATH")" ]; then
+#     raise_error "Invalid playbook: $PLAYBOOK_NAME"
+#   fi
+#   cd $PLAYBOOK_PATH
+#   run_cmd "ansible-playbook -i $ANSIBLE_INVENTORY $@"
+#   exit 0
+# fi
+
+# cmd_bootstrap
+
+cmd="$1"
+args=${ANSIBLE_PLAYBOOK_ARGS:=}
+if [ "$#" -gt 1 ]; then
+	shift 1
+	args="$*"
+fi
+
+case "$cmd" in
+	requirements )
+		cmd_requirements
+		;;
+	* )
+		exec "$@"
+		;;
+esac
+
+exit 0
+
+# commands: all lint syntax-check run_test converge requirements idempotence all
+
+# Colors!
+# red='\033[0;31m'
+# green='\033[0;32m'
+# neutral='\033[0m'
+
+# INVENTORY_PATH=${INVENTORY_PATH:-"tests/inventory"}
+# PLAYBOOK_PATH=${PLAYBOOK_PATH:-"tests/playbook.yml"}
+# REQUIREMENTS_PATH=${REQUIREMENTS_PATH:-"requirements.yml"}
+# TEST_PATH=${TEST_PATH:-"tests/run_tests.sh"}
+
+# root_role_dir="/etc/ansible/roles/role_to_test"
+# playbook="${root_role_dir}/${PLAYBOOK_PATH}"
+# inventory="${root_role_dir}/${INVENTORY_PATH}"
+# requirements="${root_role_dir}/${REQUIREMENTS_PATH}"
+# run_tests="${root_role_dir}/${TEST_PATH}"
+# play_cmd="ansible-playbook -i ${inventory}"
+
+# lint() {
+# 	printf "${green}Using ansible-lint to check syntax${neutral}\\n"
+# 	echo ansible-lint "$playbook"
+# 	ansible-lint "$playbook"
+# }
+
+# run_syntax_check() {
+# 	printf "${green}Checking ansible playbook syntax-check${neutral}\\n"
+# 	if [ ! -z "$@" ]; then
+# 		cmd="${play_cmd} $* ${playbook} --syntax-check"
+# 	else
+# 		cmd="${play_cmd} ${playbook} --syntax-check"
+# 	fi
+# 	echo "$cmd"
+# 	$cmd
+# }
+
+# converge() {
+# 	printf "${green}Running full playbook${neutral}\\n"
+# 	if [ ! -z "$@" ]; then
+# 		cmd="${play_cmd} $* ${playbook}"
+# 	else
+# 		cmd="${play_cmd} ${playbook}"
+# 	fi
+# 	echo "$cmd"
+# 	$cmd
+# }
+
+# run_test() {
+# 	printf "${green}Running tests${neutral}\\n"
+# 	sh "$run_tests"
+# }
+
+# idempotence() {
+# 	printf "${green}Running playbook again (idempotence test)${neutral}\\n"
+# 	idempotence="$(mktemp)"
+
+# 	if [ ! -z "$@" ]; then
+# 		cmd="${play_cmd} $* ${playbook}"
+# 	else
+# 		cmd="${play_cmd} ${playbook}"
+# 	fi
+# 	$cmd | tee -a "$idempotence"
+# 	tail "$idempotence" \
+# 		| grep -q 'changed=0.*failed=0' \
+# 		&& (printf "${green}Idempotence test: pass${neutral}\\n") \
+# 		|| (printf "${red}Idempotence test: fail${neutral}\\n" && exit 1)
+# }
+
+# requirements() {
+# 	if [ -f "$requirements" ]; then
+# 		printf "${green}Requirements file detected; installing dependencies.${neutral}\\n"
+# 		ansible-galaxy install -r "$requirements"
+# 	fi
+# }
+
+# usage() {
+# 	echo "usage: $0 (lint|syntax-check|requirments|converge|idempotence|run_test|all)"
+# 	echo "  lint: Runs ansible-lint on tests/playbook.yml"
+# 	echo "  syntax_check: Runs ansible-playbook --syntax-check on tests/playbook.yml"
+# 	echo "  requirements: Imports requirements from ansible galaxy"
+# 	echo "  converge: Runs tests/playbook.yml"
+# 	echo "  idempotence: Runs ansible-playbook again and fails if anything changes"
+# 	echo "  run_test: Runs pytest on tests folder"
+# 	echo "  all: Runs all of the above"
+# 	exit 1
+# }
+
+# cmd="$1"
+# args=${ANSIBLE_PLAYBOOK_ARGS:=}
+# if [ "$#" -gt 1 ]; then
+# 	shift 1
+# 	args="$*"
+# fi
+
+# case "$cmd" in
+# 	all)
+# 		lint
+# 		run_syntax_check "$args"
+# 		requirements
+# 		converge "$args"
+# 		idempotence "$args"
+# 		run_test
+# 		;;
+# 	lint)
+# 		lint
+# 		;;
+# 	syntax_check)
+# 		run_syntax_check "$args"
+# 		;;
+# 	requirements)
+# 		requirements
+# 		;;
+# 	converge)
+# 		converge "$args"
+# 		;;
+# 	idempotence)
+# 		converge "$args"
+# 		idempotence "$args"
+# 		;;
+# 	run_test)
+# 		run_test
+# 		;;
+# 	*)
+# 		usage
+# 		;;
+# esac
