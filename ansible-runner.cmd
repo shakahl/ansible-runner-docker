@@ -1,3 +1,3 @@
 @echo off
 
-docker run --rm -it -v %cd%/playbook:/ansible/playbook shakahl/ansible-runner bash %*
+docker run --rm -it -v %cd%/playbook:/ansible/playbook shakahl/ansible-runner-docker bash %*
