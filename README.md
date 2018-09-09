@@ -6,6 +6,10 @@ ansible-runner-docker
 [![Docker Automated build](https://img.shields.io/docker/automated/shakahl/ansible-runner-docker.svg)](https://hub.docker.com/r/shakahl/ansible-runner-docker/builds/)
 [![Build Status](https://travis-ci.org/shakahl/ansible-runner-docker.svg?branch=master)](https://travis-ci.org/shakahl/ansible-runner-docker)
 
+## Requirements
+
+* Installed **Docker for Windows**
+
 ## Installation
 
 ### On Windows
