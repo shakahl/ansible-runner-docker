@@ -1,3 +1,24 @@
 #!/bin/bash
 
-docker run --rm -it -v ${PWD}/playbook:/ansible/playbook ansible-runner-docker bash %*
+PLAYBOOK_DIR="${PLAYBOOK_DIR:-playbook}"
+
+ANSIBLE_RUNNER_DEFAULT_USERCONFIG="${ANSIBLE_RUNNER_DEFAULT_USERCONFIG:-$HOME/.ansible}"
+
+ANSIBLE_RUNNER_USERCONFIG="${ANSIBLE_RUNNER_USERCONFIG:-$ANSIBLE_RUNNER_DEFAULT_USERCONFIG}"
+
+if [ ! -d $PLAYBOOK_DIR ]; then
+    mkdir -p $PLAYBOOK_DIR
+fi
+
+if [ ! -d $ANSIBLE_RUNNER_USERCONFIG ]; then
+    mkdir -p $ANSIBLE_RUNNER_USERCONFIG
+fi
+
+echo "ANSIBLE_RUNNER_USERCONFIG=$ANSIBLE_RUNNER_USERCONFIG"
+echo "PLAYBOOK_DIR=$PLAYBOOK_DIR"
+
+docker run --rm -it \
+  -v $PLAYBOOK_DIR:/ansible/playbook \
+  -v $ANSIBLE_RUNNER_USERCONFIG:/ansible/.ansible \
+  shakahl/ansible-runner-docker bash "$@"
+

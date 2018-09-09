@@ -6,7 +6,7 @@ baseUrl="https://raw.githubusercontent.com/shakahl/ansible-runner-docker/master"
 installPath="/usr/local/bin/ansible-runner"
 configDir="$HOME/.ansible"
 
-echo "Ansible Runner Docker\n"
+echo "Ansible Runner Docker"
 
 if [ ! -d $configDir ]; then
 	mkdir -p $configDir
@@ -24,8 +24,11 @@ chown -R $originalUser $configDir
 chmod -R 0770 $configDir/*
 
 curl -o "$installPath" "$baseUrl/ansible-runner.sh"
-chmod 0775 "$installPath"
+chmod 0775 $installPath
 
-echo "Successfully installed: $installPath\n"
+docker login
+docker pull shakahl/ansible-runner-docker
+
+echo "Successfully installed: $installPath"
 
 exit 0
