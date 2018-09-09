@@ -3,7 +3,7 @@
 # provisioned by Ansible.
 ################################################################################
 
-FROM alpine:3.7
+FROM alpine:3.8
 
 MAINTAINER Soma Szelpal <szelpalsoma@gmail.com>
 
