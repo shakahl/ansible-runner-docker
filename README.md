@@ -13,7 +13,7 @@ ansible-runner-docker
 **Command line**
 
 ```batch
-@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/shakahl/ansible-runner-docker/master/install.ps1'))" && SET "PATH=%PATH%;%USERNAME%\Appdata\Local\ansible-runner\ansible-runner.cmd"
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/shakahl/ansible-runner-docker/master/install.ps1'))" && SET "PATH=%PATH%;%APPDATA%\ansible-runner\ansible-runner.cmd"
 ```
 
 **PowerShell**
@@ -24,14 +24,43 @@ Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.We
 
 ### On Linux
 
+curl method:
 ```bash
 #!/bin/bash
-
-echo "TODO"
-
+curl -sL https://raw.githubusercontent.com/shakahl/ansible-runner-docker/master/install.sh | sudo bash -
 ```
 
+wget method:
+```bash
+#!/bin/bash
+wget -O - https://raw.githubusercontent.com/shakahl/ansible-runner-docker/master/install.sh | sudo bash
+```
+
+## Configuration
+
+### Playbook path
+
+Default playbook path is `<current dir>/playbook`
+
+You can override the playbook path via environment variable `PLAYBOOK_PATH`.
+
+### Ansible configuration
+
+The installer creates `.ansible` directory under the HOME. It places default configuration if not exits.
+
 ## Usage
+
+### On Windows
+
+```bash
+ansible-runner.cmd
+```
+
+```bash
+ansible-runner.cmd -i all playbook/playbook.yml
+```
+
+### On Linux
 
 ```bash
 ansible-runner
@@ -42,5 +71,6 @@ ansible-runner -i all playbook/playbook.yml
 ```
 
 ## Resources
+
 * https://alpinelinux.org/
 * http://ansible.com
