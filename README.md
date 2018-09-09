@@ -19,7 +19,7 @@ ansible-runner-docker
 
 **PowerShell**
 
-˛```ps
+```ps
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/shakahl/ansible-runner-docker/master/install.ps1'))
 ```
 
