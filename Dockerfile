@@ -100,7 +100,7 @@ ADD ./docker/docker-entrypoint.d /docker-entrypoint.d
 RUN chmod -R +x /docker-entrypoint.d
 
 ADD ./docker/docker-entrypoint /docker-entrypoint
-RUN chmod +x /docker-entrypoint.d
+RUN chmod +x /docker-entrypoint
 
 ADD ./docker/home/ansible/.bashrc /root/
 ADD ./docker/home/ansible/.profile /root/
