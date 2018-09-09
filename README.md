@@ -6,9 +6,9 @@ ansible-runner-docker
 [![Docker Automated build](https://img.shields.io/docker/automated/shakahl/ansible-runner-docker.svg)](https://hub.docker.com/r/shakahl/ansible-runner-docker/builds/)
 [![Build Status](https://travis-ci.org/shakahl/ansible-runner-docker.svg?branch=master)](https://travis-ci.org/shakahl/ansible-runner-docker)
 
-## Usage
+## Installation
 
-### Windows
+### On Windows
 
 **Command line**
 
@@ -22,13 +22,23 @@ ansible-runner-docker
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/shakahl/ansible-runner-docker/master/install.ps1'))
 ```
 
-### Linux
+### On Linux
 
 ```bash
 #!/bin/bash
 
 echo "TODO"
 
+```
+
+## Usage
+
+```bash
+ansible-runner
+```
+
+```bash
+ansible-runner -i all playbook/playbook.yml
 ```
 
 ## Resources
