@@ -18,7 +18,7 @@ script:
 
 script:
   - docker build -t ${DOCKER_IMAGE} .
-  - docker push $IMAGE_NAME:$CI_BUILD_REF
+  - docker push $DOCKER_IMAGE:$CI_BUILD_REF
 
 after_success:
  - docker login -u $DOCKER_USER -p $DOCKER_PASS
