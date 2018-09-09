@@ -47,12 +47,8 @@ Invoke-Expression -Command "(New-Object System.Net.WebClient).DownloadFile('$bas
 Write-Output 'Ensuring commands are on the path'
 
 if ($($env:Path).ToLower().Contains($($installDir).ToLower()) -eq $false) {
-  #$env:Path = [Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::User)
-  $pathElements = @([Environment]::GetEnvironmentVariable('Path', [System.EnvironmentVariableTarget]::User) -split ";")
-  $pathElements += $installDir
-  $newPath = $pathElements -join ";"
-  [Environment]::SetEnvironmentVariable('Path', $newPath, [System.EnvironmentVariableTarget]::User)
-  $env:Path = $newPath
+  [Environment]::SetEnvironmentVariable
+    ( "Path", $env:Path + ";$installDir", [System.EnvironmentVariableTarget]::User )
 }
 
 
@@ -61,5 +57,6 @@ if ($($env:Path).ToLower().Contains($($installDir).ToLower()) -eq $false) {
 $dockerCmd -replace ' ', '` '
 
 # Pulling docker image
-Invoke-Expression -Command "'$dockerCmd  pull shakahl/ansible-runner-docker'"
+Invoke-Expression -Command "'$dockerCmd pull shakahl/ansible-runner-docker'"
+
 
