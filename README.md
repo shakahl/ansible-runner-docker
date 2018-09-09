@@ -10,11 +10,17 @@ ansible-runner-docker
 
 ### Windows
 
+**Command line**
+
 ```batch
-@echo off
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/shakahl/ansible-runner-docker/master/install.bat'))" && SET "PATH=%PATH%;%USERNAME%\Appdata\Local\ansible-runner\ansible-runner.cmd"
 
-docker run --rm -it -v %cd%/playbook:/ansible/playbook shakahl/ansible-runner-docker bash %*
+```
 
+**PowerShell**
+
+˛```ps
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/shakahl/ansible-runner-docker/master/install.ps1'))
 ```
 
 ### Linux
@@ -22,7 +28,7 @@ docker run --rm -it -v %cd%/playbook:/ansible/playbook shakahl/ansible-runner-do
 ```bash
 #!/bin/bash
 
-docker run --rm -it -v ${PWD}/playbook:/ansible/playbook ansible-runner-docker bash %*
+echo "TODO"
 
 ```
 
